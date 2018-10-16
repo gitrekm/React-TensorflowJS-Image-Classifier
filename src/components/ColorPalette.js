@@ -1,5 +1,6 @@
 import React from "react";
 import "./ColorPalette.css";
+import rgbToHex from "rgb-to-hex";
 
 const ColorPalette = props => {
 
@@ -17,7 +18,7 @@ const ColorPalette = props => {
 					<div
 						style={{ backgroundColor: `${ backgroundColor }` }}
 						className="colorDiv tooltip">
-						<span className="tooltiptext">{ backgroundColor }</span>
+						<span className="tooltiptext">{ "#" + rgbToHex(backgroundColor) }</span>
 					</div>
 					<div
 						style={{ backgroundColor: `${ alternativeColor }` }}

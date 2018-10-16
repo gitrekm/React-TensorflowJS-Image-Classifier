@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./UploadFile.css";
-import Ionicon from 'react-ionicons'
-import axios from "axios";
+import swal from 'sweetalert'
 import Spinner from "./Spinner";
 import ColorPalette from "./ColorPalette";
 // Importing tensorflow mobilenet model
@@ -11,6 +10,10 @@ import getImagePalette from 'image-palette-core';
 // Importing the default image
 import defaultImg from "../images/defaultImg.jpg";
 
+import pica from "pica";
+// const pica = require('pica')();
+
+
 
 export default class UploadFile extends Component {
 	state = {
@@ -19,6 +22,7 @@ export default class UploadFile extends Component {
 		predictions: [],
 		palette: {}
 	}
+
 
 	// Start the automated Image Classifier once the user has chosen an image
 	fileSelectorHandler = async (e) => {
@@ -31,7 +35,7 @@ export default class UploadFile extends Component {
 		// Take the first file uploaded.
 		const file = e.target.files[0];
 		// Start the automation ifthe user have choose an image to load
-		if(file === undefined){
+		if(file === undefined || file.size > 10**7){
 			// Stop it right await and stop the loader
 			this.setState({ isLoading: false });
 		} else {
@@ -41,20 +45,20 @@ export default class UploadFile extends Component {
 			})
 			// check if it's an image
 			const ext = file.name.split(".").reverse()[0];
-			if(ext === "jpg" || ext === "jepg" || ext === "png"){
+			if(ext === "jpg" || ext === "jpeg" || ext === "png"){
 				// Read the image file and recognize the image
 				this.readFile();
 			}
 			else {
 				// If it's not an image just alert to the user
-				alert("Please choose an image (.jpg or png).");
+				swal("Wrong file type!", "Please choose an image (.jpg or png).", "error");
 				// Stop it right await and stop the loader
 				this.setState({ isLoading: false });
 			}
 		}
 	}
 
-	readFile = async () => {
+	readFile = async (result) => {
 		// Select the file from the state
 		const selectedFile = this.state.fileToUpload;
 		// init the file reader
@@ -76,8 +80,7 @@ export default class UploadFile extends Component {
 			};
 			reader.readAsDataURL(selectedFile);
 		})()
-			.then(() => {
-				console.log(tfImg)
+			.then(async () => {
 				// Call the recognize function
 				this.regognizePhoto();
 			})
@@ -86,11 +89,21 @@ export default class UploadFile extends Component {
 	regognizePhoto = async () => {
 		// Recognize the image label using TensorFlow mobilenet model
 		const img = document.getElementById('myTfImage');
-		console.log(img)
 		// Load the model.
 		const model = await mobilenet.load();
+		// check if something went wrong...
+		let predictions = null;
+		setTimeout(() => {
+			// If something went wrong during the process, tell it to the user and reload the page
+			if(predictions === null){
+				swal("Something went wrong...", "Please try again or try another image!", "error")
+				  .then(() => {
+						window.location.reload();
+					})
+			}
+		}, 3000)
 		// Classify the image. (check for the first prediction only)
-		const predictions = await model.classify(img, 1);
+		predictions = await model.classify(img, 1);
 		// put the predictions in the state
 		this.setState({ predictions });
 		// Now, let's get the color palette
@@ -115,8 +128,7 @@ export default class UploadFile extends Component {
 			// Get the first prediction and the probability of the first prediction (out of 2)
 			const probability = Math.floor(this.state.predictions[0].probability * 100) + "%";
 			// Change the text prediction text if there is no photo, it's loading or we have the prediction
-			console.log(this.state.predictions[0].className)
-			predictionText = (<span>I thing it's a <span className="prediction">{ this.state.predictions[0].className }</span> at <span className="prediction">{ probability }</span>!</span>);
+			predictionText = (<span>I think it's a <span className="prediction">{ this.state.predictions[0].className }</span> at <span className="prediction">{ probability }</span>!</span>);
 		}
 
 		return (
