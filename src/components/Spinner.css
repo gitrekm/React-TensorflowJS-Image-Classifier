@@ -1,0 +1,24 @@
+.spinnerDiv{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+	background-color: #0003;
+	border-radius: .3rem;
+}
+
+.spinner {
+	border: 7px solid #fff;
+	border-top: 7px solid #007bff;
+	height: 4rem;
+	width: 4rem;
+	border-radius: 50%;
+	animation: 1s infiniteRotation linear infinite;
+}
+
+@keyframes infiniteRotation {
+	100%{
+		transform: rotate(360deg);
+	}
+}
