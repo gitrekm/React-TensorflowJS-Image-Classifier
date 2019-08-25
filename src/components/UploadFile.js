@@ -134,7 +134,7 @@ export default class UploadFile extends Component {
 		return (
 			<div className="uploadFileDiv">
 
-				<h1 className="classifierTitle">Automated Image Classifier</h1>
+				<h1 className="classifierTitle">Image Classifier</h1>
 
 				<div className="uploadDiv">
 					<div className="imgAndPalette">

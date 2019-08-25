@@ -1,9 +1,10 @@
-## React-TensorflowJS-Img-Classifier
+## Image Classifier using React and Tensorflow.js
 
-This is a Image Recognition app that use Tensorflow.js mobilenet pre-trained model to add a label to the chosen image. It also create a 3 colors palette from the image. 
+This is a Image Recognition app that use Tensorflow.js mobilenet pre-trained model to add a label to the chosen image. 
 
 
-![Screenshot](screenshot.png)
+# install dependencies
+npm install
 
-You can try it at:
-https://tensorflow-img-clf.herokuapp.com/
+# serve with hot reload at localhost:3000
+npm start
