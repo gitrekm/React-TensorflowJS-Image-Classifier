@@ -1,6 +1,6 @@
 ## Image Classifier using React and Tensorflow.js
 
-This is a Image Recognition app that use Tensorflow.js mobilenet pre-trained model to add a label to the chosen image. 
+This is an Image Classifier app that use Tensorflow.js mobilenet pre-trained model to add a label to the chosen image. 
 
 
 # install dependencies
